@@ -1,5 +1,5 @@
 /* express的服务器 */
-// import { createCollect, insertVisitedPoint } from './mongoDBConfig.js'
+import { insertVisitedPoint } from './mongoDBConfig.js'
 //1. 导入express
 import fs from 'fs'
 import http from 'http'
@@ -20,15 +20,16 @@ server.use(Router)
 //3. 访问服务器(get或者post)
 //参数一: 请求根路径
 //3.1 get请求
-server.get('/store/', function (req, res) {
+server.get('/store', function (req, res) {
     const ip = getClientIp(req)
-    // insertVisitedPoint({ ip, time: new Date().getTime() })
+    insertVisitedPoint({ ip, time: new Date().getTime() })
     res.send(`get请求成功, ${ip}`)
 })
 
 //3.2 post请求
-server.post('/store/', function (req, res) {
+server.post('/store', function (req, res) {
     const ip = getClientIp(req)
+    insertVisitedPoint({ ip, time: new Date().getTime(), post: true })
     res.send(`post请求成功, ${ip}`)
 })
 
@@ -42,4 +43,4 @@ function getClientIp(req) {
 
 //4. 绑定端口
 server.listen(8889)
-console.log('启动4040')
+console.log('启动8889端口')
