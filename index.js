@@ -15,39 +15,29 @@ server.use(express.json())
 const Router = express.Router() // 实例化一个路由对象
 
 // 路由分模块
-server.use(Router)
+app.use(Router)
 
-// Add headers before the routes are defined
-server.all("*", function (req, res, next) {
-
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
+//设置跨域访问
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    res.header("Content-Type", "application/json;charset=utf-8");
     next();
 });
 
 //3. 访问服务器(get或者post)
 //参数一: 请求根路径
 //3.1 get请求
-server.get('/store', function (req, res) {
+app.get('/store', function (req, res) {
     const ip = getClientIp(req)
     insertVisitedPoint({ ip, time: new Date().getTime() })
     res.send(`get请求成功, ${ip}`)
 })
 
 //3.2 post请求
-server.post('/store', function (req, res) {
+app.post('/store', function (req, res) {
     const ip = getClientIp(req)
     insertVisitedPoint({ ip, time: new Date().getTime(), post: true })
     res.send(`post请求成功, ${ip}`)
@@ -62,5 +52,5 @@ function getClientIp(req) {
 };
 
 //4. 绑定端口
-server.listen(8889)
+app.listen(8889)
 console.log('启动8889端口')
