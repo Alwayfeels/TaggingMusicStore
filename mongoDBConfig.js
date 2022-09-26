@@ -1,7 +1,8 @@
 import MongoDB from 'mongodb'
 
 var MongoClient = MongoDB.MongoClient;
-var url = "mongodb://localhost:27017";
+// var url = "mongodb://localhost:27017";
+var url = "mongodb://43.143.12.132:27017"; // remote db
 
 export function createDB() {
     MongoClient.connect(url, function (err, db) {
