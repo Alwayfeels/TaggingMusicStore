@@ -6,10 +6,10 @@ import http from 'http'
 import express from 'express'
 
 //2. 创建express服务器
-var server = express()
+var app = express()
 
-server.use(express.urlencoded({ extended: false }))
-server.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 
 // const Router = require('./router') // 引入分模块管理的路由
 const Router = express.Router() // 实例化一个路由对象
