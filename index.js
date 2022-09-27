@@ -25,7 +25,8 @@ app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Credentials", "true")
     res.header("X-Powered-By",' 3.2.1')
     res.header("Content-Type", "application/json;charset=utf-8");
-    next();
+    if (req.method === "OPTIONS") res.send(200) // 预检请求快速返回
+    else next();
 });
 
 //3. 访问服务器(get或者post)
