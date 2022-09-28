@@ -1,8 +1,8 @@
 import { MongoClient } from 'mongodb'
 
 // db config
-const username = encodeURIComponent("root");
-const password = encodeURIComponent("root");
+const username = encodeURIComponent("wangyunsong");
+const password = encodeURIComponent("wys123456");
 const clusterUrl = "43.143.12.132";
 // const clusterUrl = "localhost:27017";
 

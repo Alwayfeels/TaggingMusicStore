@@ -6,14 +6,16 @@ const router = express.Router()
 // get请求
 router.get('/', function (req, res) {
     const ip = getClientIp(req)
-    DB.insertVisitedPoint({ ip, time: new Date().getTime() })
+    const query = req.query
+    DB.insertVisitedPoint({ ip, time: new Date().getTime(), ...query })
     res.send(RES_CONFIG.success(`get succss, ${ip}`))
 })
 
 // post请求
 router.post('/', function (req, res) {
     const ip = getClientIp(req)
-    DB.insertVisitedPoint({ ip, time: new Date().getTime(), post: true })
+    const data = req.body
+    DB.insertVisitedPoint({ ip, time: new Date().getTime(), post: true, ...data })
     res.send(RES_CONFIG.success('post success'))
 })
 
