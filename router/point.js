@@ -13,7 +13,7 @@ router.get('/', function (req, res) {
 // post请求
 router.post('/', function (req, res) {
     const ip = getClientIp(req)
-    DB.insertVisitedPoint({ ip, time: new Date().getTime(), post: true })
+    DB.insertVisitedPoint({ ip, time: new Date().getTime(), post: true, req. })
     res.send(RES_CONFIG.success('post success'))
 })
 
