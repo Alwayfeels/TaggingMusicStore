@@ -4,18 +4,17 @@ import DB from '../utils/mongoDBConfig.js'
 const router = express.Router()
 
 // get请求
-router.get('/', function (req, res) {
+router.get('/welcome', function (req, res) {
     const ip = getClientIp(req)
-    const query = req.query
-    DB.insertVisitedPoint({ ip, time: new Date().getTime(), ...query })
-    res.send(RES_CONFIG.success(`get succss, ${ip}`))
+    DB.insertWelcome({ ip, date: new Date().getTime() })
+    res.send(RES_CONFIG.success(`welcome!`))
 })
 
 // post请求
 router.post('/', function (req, res) {
     const ip = getClientIp(req)
     const data = req.body
-    DB.insertVisitedPoint({ ip, time: new Date().getTime(), post: true, ...data })
+    DB.insertVisitedPoint({ ip, date: new Date().getTime(), post: true, ...data })
     res.send(RES_CONFIG.success('post success'))
 })
 

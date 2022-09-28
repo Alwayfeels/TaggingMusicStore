@@ -26,6 +26,21 @@ export async function pingDb() {
     // }
 }
 
+export async function insertWelcome(info) {
+    try {
+        const database = client.db("TaggingMusic");
+        const point = database.collection("welcome")
+        // insert data
+        point.insertOne(info, function (err, res) {
+            if (err) throw err;
+            console.log("新访问记录：", info);
+        })
+    } catch {
+        console.log('MONGODB IS CLOSED')
+        await client.close()
+    }
+}
+
 export async function insertVisitedPoint(info) {
     try {
         const database = client.db("TaggingMusic");
@@ -53,4 +68,4 @@ export async function insertVisitedPoint(info) {
 //     });
 // }
 
-export default { insertVisitedPoint, pingDb }
+export default { insertVisitedPoint, insertWelcome }
