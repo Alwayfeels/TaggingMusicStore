@@ -1,38 +1,56 @@
-import MongoDB from 'mongodb'
+import { MongoClient } from 'mongodb'
 
-var MongoClient = MongoDB.MongoClient;
-// var url = "mongodb://localhost:27017";
-var url = "mongodb://43.143.12.132:27017"; // remote db
+// db config
+const username = encodeURIComponent("root");
+const password = encodeURIComponent("root");
+const clusterUrl = "43.143.12.132";
+// const clusterUrl = "localhost:27017";
 
-export function createDB() {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        console.log("数据库已创建!");
-        db.close();
-    });
+// const authMechanism = "DEFAULT";
+const authMechanism = "SCRAM-SHA-256";
+
+const uri = `mongodb://${username}:${password}@${clusterUrl}/?authMechanism=${authMechanism}`;
+
+// Create a new MongoClient
+const client = new MongoClient(uri);
+
+export async function pingDb() {
+    // try {
+    //     // Establish and verify connection
+    //     await client.db("admin").command({ ping: 1 });
+    //     console.log("Connected successfully to server");
+    // } finally {
+    //     // Ensures that the client will close when you finish/error
+    //     console.log('MONGODB IS CLOSED')
+    //     await client.close();
+    // }
 }
 
-export function createCollect() {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        console.log('数据库已创建');
-        var dbase = db.db("TaggingMusic");
-        dbase.createCollection('point', function (err, res) {
-            if (err) throw err;
-            console.log("创建集合!");
-            db.close();
-        });
-    });
-}
-
-export function insertVisitedPoint(info) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        var dbo = db.db("TaggingMusic");
-        dbo.collection("point").insertOne(info, function (err, res) {
+export async function insertVisitedPoint(info) {
+    try {
+        const database = client.db("TaggingMusic");
+        const point = database.collection("point")
+        // insert data
+        point.insertOne(info, function (err, res) {
             if (err) throw err;
             console.log("埋点记录成功：", info);
-            db.close();
-        });
-    });
+        })
+    } catch {
+        console.log('MONGODB IS CLOSED')
+        await client.close()
+    }
 }
+
+// export function insertVisitedPoint(info) {
+//     MongoClient.connect(url, function (err, db) {
+//         if (err) throw err;
+//         var dbo = db.db("TaggingMusic");
+//         dbo.collection("point").insertOne(info, function (err, res) {
+//             if (err) throw err;
+//             console.log("埋点记录成功：", info);
+//             db.close();
+//         });
+//     });
+// }
+
+export default { insertVisitedPoint, pingDb }
