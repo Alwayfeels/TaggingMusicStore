@@ -21,13 +21,27 @@ router.post('/', function (req, res) {
 /**
  * @desc: 上传Tag
  */
-router.post('/postTaggedSong', function (req, res) {
+router.post('/postTaggedSongs', function (req, res) {
     const data = req.body
     const needProps = ['taggedSongs', 'userId', 'profile'];
     if (!validateProps(res, data, needProps)) return false;
     DB.insertTaggedSongs(data)
     res.send(RES_CONFIG.success('upload success.'))
 })
+
+/**
+ * @desc: 下载Tag
+ */
+router.get('/getTaggedSongs', async function (req, res) {
+    const { userId } = req.query
+    if (!userId) {
+        res.send({ code: 400, message: 'userId is required', data: null })
+        return false;
+    }
+    const data = await DB.searchTaggedSongs(userId)
+    res.send({ code: 200, message: 'success', data })
+})
+
 // ====================================================
 const RES_CONFIG = {
     success: (data = null, message = 'success', code = 200) => {

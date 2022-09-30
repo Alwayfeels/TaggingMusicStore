@@ -70,5 +70,27 @@ export async function insertTaggedSongs(data) {
     }
 }
 
+/**
+ * @desc: 获取 taggedSongs 数据
+ */
+export async function searchTaggedSongs(userId) {
+    try {
+        userId = Number(userId)
+        const database = client.db("TaggingMusic");
+        const Collection = database.collection("taggedSongs")
+        // Query for a movie that has the title 'The Room'
+        const query = { userId };
+        const isExist = await Collection.findOne(query);
+        console.log('success', isExist)
+        if (isExist) {
+            return isExist
+        } else {
+            return null
+        }
+    } catch (err) {
+        console.log('error: function searchTaggedSongs: ' + err)
+        await client.close()
+    }
+}
 
-export default { insertVisitedPoint, insertWelcome, insertTaggedSongs }
+export default { insertVisitedPoint, insertWelcome, insertTaggedSongs, searchTaggedSongs }
