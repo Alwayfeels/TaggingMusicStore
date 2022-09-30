@@ -44,4 +44,31 @@ export async function insertVisitedPoint(info) {
     }
 }
 
-export default { insertVisitedPoint, insertWelcome }
+/**
+ * @desc: 插入 taggedSongs 数据
+ * @param: { userId, profile, taggedSongs}
+ */
+export async function insertTaggedSongs(data) {
+    try {
+        const database = client.db("TaggingMusic");
+        const Collection = database.collection("taggedSongs")
+        // Query for a movie that has the title 'The Room'
+        const query = { userId: data.userId };
+        const isExist = await Collection.findOne(query);
+        if (isExist) {
+            // replace Data
+            await Collection.replaceOne(query, data)
+        } else {
+            // insert data
+            const options = { ordered: true };
+            await Collection.insertOne(data, options)
+        }
+        console.log("taggedSongs 插入成功");
+    } catch (err) {
+        console.log('error: function insertTaggedSongs: ' + err)
+        await client.close()
+    }
+}
+
+
+export default { insertVisitedPoint, insertWelcome, insertTaggedSongs }

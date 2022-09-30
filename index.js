@@ -20,7 +20,7 @@ app.all('*', function (req, res, next) {
 
 app.use('/docs', express.static('swagger')); // 配置swagger文档
 // app.use(express.urlencoded({ extended: false }))
-// app.use(express.json())
+app.use(express.json())
 
 import useRoutes from './router/index.js' // 引入分模块管理的路由
 useRoutes(app) // 导入路由
