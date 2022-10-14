@@ -45,7 +45,7 @@ router.get('/getTaggedSongs', async function (req, res) {
 /**
  * @desc: 同步 tag, 上传本地 Tag，返回最新的合并后 tag
  */
- router.get('/syncTags', async function (req, res) {
+ router.post('/syncTags', async function (req, res) {
     const data = req.body
     const needProps = ['taggedSongs', 'userId', 'profile'];
     if (!validateProps(res, data, needProps)) return false;
