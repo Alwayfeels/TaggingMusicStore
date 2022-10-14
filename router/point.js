@@ -48,7 +48,7 @@ router.get('/getTaggedSongs', async function (req, res) {
 router.get('/getPreviewData', async function (req, res) {
     const myID = 83245422
     const data = await DB.searchTaggedSongs(myID)
-    res.send({ code: 200, message: 'success', data })
+    res.send({ code: 200, message: 'success', data: data.taggedSongs })
 })
 
 // ====================================================
