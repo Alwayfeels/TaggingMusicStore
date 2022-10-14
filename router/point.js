@@ -25,7 +25,7 @@ router.post('/postTaggedSongs', function (req, res) {
     const data = req.body
     const needProps = ['taggedSongs', 'userId', 'profile'];
     if (!validateProps(res, data, needProps)) return false;
-    DB.insertTaggedSongs(data)
+    DB.insertTaggedSongs(data, 'taggedSongs')
     res.send(RES_CONFIG.success('upload success.'))
 })
 
@@ -39,6 +39,15 @@ router.get('/getTaggedSongs', async function (req, res) {
         return false;
     }
     const data = await DB.searchTaggedSongs(userId)
+    res.send({ code: 200, message: 'success', data })
+})
+
+/**
+ * @desc: 获取首页预览数据 previewTaggedSong;
+ */
+router.get('/getPreviewData', async function (req, res) {
+    const myID = 83245422
+    const data = await DB.searchTaggedSongs(myID)
     res.send({ code: 200, message: 'success', data })
 })
 

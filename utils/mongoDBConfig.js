@@ -48,10 +48,10 @@ export async function insertVisitedPoint(info) {
  * @desc: 插入 taggedSongs 数据
  * @param: { userId, profile, taggedSongs}
  */
-export async function insertTaggedSongs(data) {
+export async function insertTaggedSongs(data, collectionName) {
     try {
         const database = client.db("TaggingMusic");
-        const Collection = database.collection("taggedSongs")
+        const Collection = database.collection(collectionName)
         // Query for a movie that has the title 'The Room'
         const query = { userId: data.userId };
         const isExist = await Collection.findOne(query);
@@ -82,11 +82,7 @@ export async function searchTaggedSongs(userId) {
         const query = { userId };
         const isExist = await Collection.findOne(query);
         console.log('success', isExist)
-        if (isExist) {
-            return isExist
-        } else {
-            return null
-        }
+        return isExist || null
     } catch (err) {
         console.log('error: function searchTaggedSongs: ' + err)
         await client.close()
