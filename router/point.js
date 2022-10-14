@@ -52,7 +52,7 @@ router.get('/getTaggedSongs', async function (req, res) {
 
     DB.insertTaggedSongs(data, 'taggedSongs')
     
-    const resData = await DB.searchTaggedSongs(userId)
+    const resData = await DB.searchTaggedSongs(data.userId)
     res.send({ code: 200, message: 'success', resData })
 })
 
