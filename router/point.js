@@ -6,7 +6,7 @@ const router = express.Router()
 // get请求
 router.get('/welcome', function (req, res) {
     const ip = getClientIp(req)
-    DB.insertWelcome({ ip, date: new Date().getTime() })
+    DB.insertWelcome({ ip, date: new Date().format() })
     res.send(RES_CONFIG.success(`welcome!`))
 })
 
@@ -14,7 +14,7 @@ router.get('/welcome', function (req, res) {
 router.post('/', function (req, res) {
     const ip = getClientIp(req)
     const data = req.body
-    DB.insertVisitedPoint({ ip, date: new Date().getTime(), post: true, ...data })
+    DB.insertVisitedPoint({ ip, date: new Date().format(), post: true, ...data })
     res.send(RES_CONFIG.success('post success'))
 })
 
@@ -45,13 +45,13 @@ router.get('/getTaggedSongs', async function (req, res) {
 /**
  * @desc: 同步 tag, 上传本地 Tag，返回最新的合并后 tag
  */
- router.post('/syncTags', async function (req, res) {
+router.post('/syncTags', async function (req, res) {
     const data = req.body
     const needProps = ['taggedSongs', 'userId', 'profile'];
     if (!validateProps(res, data, needProps)) return false;
 
     DB.insertTaggedSongs(data, 'taggedSongs')
-    
+
     const resData = await DB.searchTaggedSongs(data.userId)
     res.send({ code: 200, message: 'success', data: resData })
 })
@@ -88,6 +88,27 @@ function validateProps(res, data = {}, props) {
         }
     })
     return valid
+}
+
+Date.prototype.format = function (fmt = 'yyyy-MM-dd hh:mm:ss') {
+    var o = {
+        "M+": this.getMonth() + 1,                 //月份 
+        "d+": this.getDate(),                    //日 
+        "h+": this.getHours(),                   //小时 
+        "m+": this.getMinutes(),                 //分 
+        "s+": this.getSeconds(),                 //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds()             //毫秒 
+    };
+    if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        }
+    }
+    return fmt;
 }
 // ====================================================
 
